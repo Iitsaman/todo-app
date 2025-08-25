@@ -1,0 +1,31 @@
+# Ignore dependencies (you rebuild them inside Docker)
+# Avoid copying node_modules — they are installed fresh inside the image.
+
+node_modules
+
+# Output of previous builds
+build
+dist
+
+# Git-related > Prevent .git and logs bloating your Docker build context.
+.git
+.gitignore
+
+# Logs and temp
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+*.log
+
+# Environment > Avoid copying .env files for security reasons.
+.env
+.env.*  # in case you're using multiple env files
+
+# Docker
+Dockerfile
+.dockerignore
+
+# OS and editor junk
+.DS_Store
+*.swp
+*.swo

@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  todo-frontend:
+    build: ./todo-frontend
+    ports: 
+      - "80:80"
+    container_name: frontend
+    networks:
+      - todo-network
+    depends_on:
+      - todo-backend
+
+
+  todo-backend:
+    build: ./todo-backend
+    ports: 
+      - "3001:3001"
+    container_name: backend
+    networks:
+      - todo-network
+    env_file:
+      - ./todo-backend/.env
+
+networks:
+  todo-network:
+    driver: bridge
+
+
+
+# docker-compose up --build
+

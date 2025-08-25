@@ -1,0 +1,54 @@
+# =========================
+# Root .gitignore for Todo-app (MERN + Vite)
+# =========================
+
+# Node modules
+Todo-frontend/node_modules
+Todo-backend/node_modules
+
+# Build outputs
+Todo-frontend/dist
+Todo-frontend/dist-ssr
+Todo-backend/build
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment variables
+.env
+.env.*
+Todo-frontend/.env
+Todo-frontend/.env.*
+Todo-backend/.env
+Todo-backend/.env.*
+
+# OS/system files
+.DS_Store
+Thumbs.db
+
+# IDE/editor files
+.vscode/
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Test coverage
+coverage/
+Todo-frontend/coverage/
+Todo-backend/coverage/
+
+# Optional: ignore lock files if using multiple package managers
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml

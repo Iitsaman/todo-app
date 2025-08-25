@@ -1,0 +1,35 @@
+
+# Ignore node modules (install fresh inside Docker)
+node_modules
+
+# Ignore build output if any
+dist
+
+# Logs and debug files
+npm-debug.log
+*.log
+yarn-debug.log
+yarn-error.log
+
+# Ignore tests if not needed in the image
+tests
+
+# Ignore Git data and config files
+.git
+.gitignore
+
+# Environment files — do NOT copy secrets into Docker image
+.env
+.env.*
+
+# Docker configs — you don't want to COPY these inside the image itself
+Dockerfile
+.dockerignore
+
+# Misc markdown docs (optional)
+*.md
+
+# OS and editor junk
+.DS_Store
+*.swp
+*.swo
