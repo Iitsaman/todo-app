@@ -1,5 +1,9 @@
 
 import React, { useState, useEffect } from "react";
+<<<<<<< HEAD
+=======
+import BACKEND_URL from "../config/config";
+>>>>>>> c92e127 ( add terraform ansbile github action files)
 
 const TodoApp = () => {
   const [todo, setTodo] = useState("");
@@ -20,7 +24,11 @@ const TodoApp = () => {
   // Fetch all todos from backend
   const fetchTodos = async () => {
     try {
+<<<<<<< HEAD
       const response = await fetch('/api/todos'); // ✅ RELATIVE path
+=======
+      const response = await fetch('${BACKEND_URL}/todos'); // ✅ RELATIVE path fetch('/api/todos');
+>>>>>>> c92e127 ( add terraform ansbile github action files)
       console.log("Fetch response status:", response.status);
       if (response.ok) {
         const data = await response.json();
@@ -46,7 +54,12 @@ const TodoApp = () => {
     
     setLoading(true);
     try {
+<<<<<<< HEAD
       const response = await fetch('http://localhost:3001/api/add-todo', {
+=======
+      const response = await fetch('${BACKEND_URL}/add-todo', // ${BACKEND_URL} fetch('http://localhost:3001/api/add-todo'
+        {
+>>>>>>> c92e127 ( add terraform ansbile github action files)
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
@@ -80,7 +93,12 @@ const TodoApp = () => {
   // Handle delete todo
   const handleDelete = async (todoId) => {
     try {
+<<<<<<< HEAD
       const response = await fetch(`http://localhost:3001/api/delete-todo/${todoId}`, {
+=======
+      const response = await fetch(`${BACKEND_URL}/delete-todo/${todoId}`, // fetch(`http://localhost:3001/api/delete-todo/${todoId}`
+         {
+>>>>>>> c92e127 ( add terraform ansbile github action files)
         method: "DELETE"
       });
 
@@ -99,7 +117,12 @@ const TodoApp = () => {
   // Handle toggle complete status
   const handleToggleComplete = async (todoId, currentStatus) => {
     try {
+<<<<<<< HEAD
       const response = await fetch(`http://localhost:3001/api/toggle-todo/${todoId}`, {
+=======
+      const response = await fetch(`${BACKEND_URL}//toggle-todo/${todoId}`, // fetch(`http://localhost:3001/api/toggle-todo/${todoId}`
+         {
+>>>>>>> c92e127 ( add terraform ansbile github action files)
         method: "PATCH",
         headers: {
           'Content-Type': 'application/json'

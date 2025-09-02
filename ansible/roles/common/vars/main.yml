@@ -1,0 +1,19 @@
+nginx_package_name:
+  Ubuntu: nginx
+  Amazon: nginx
+
+node_package_name:
+  Ubuntu: nodejs
+  Amazon: nodejs
+
+npm_package_name:
+  Ubuntu: npm
+  Amazon: npm
+
+package_names:
+   - pk_name: "{{ nginx_package_name[ansible_distribution] }}"
+   - pk_name: "{{ node_package_name[ansible_distribution] }}"
+   - pk_name: "{{ npm_package_name[ansible_distribution] }}"
+   - pk_name: git 
+   - pk_name: docker
+   - pk_name: - curl
