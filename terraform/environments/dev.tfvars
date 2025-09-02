@@ -41,7 +41,7 @@ cloudfront_config = {
   acm_certificate_arn = "arn:aws:acm:us-east-1:221082199107:certificate/67897093-3492-4ccf-a144-104487e654a0"
 }
 
-\
+
 
 #vpc_config = {
 #  subnet_id = "subnet-xxxxxxxx" # Replace with actual subnet
