@@ -67,6 +67,9 @@ cloudfront_config = {
 
 # terraform apply -var-file="environments/dev.tfvars"
 
+# terraform apply -var-file="environments/dev.tfvars" -auto-approve
+
+
 # terraform destroy -var-file="environments/dev.tfvars"
 
 
