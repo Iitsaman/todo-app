@@ -51,10 +51,10 @@ jobs:
         run: terraform plan -var-file="environments/dev.tfvars"
         working-directory: terraform        
 
-#      - name: Terraform Apply
-#        run: terraform apply -var-file="environments/dev.tfvars" -auto-approve
+      - name: Terraform Apply
+        run: terraform apply -var-file="environments/dev.tfvars" -auto-approve
 
-#        working-directory: terraform
+        working-directory: terraform
 
       - name: Create SSH key file
         run: |
