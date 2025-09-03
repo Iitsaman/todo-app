@@ -1,8 +1,8 @@
 
+- name: configuration of ec2 instances
+  hosts: launched_ec2_instances
+  gather_facts: yes
 
--name: configuration of ec2 instances 
-hosts: launched_ec2_instances 
-gather_facts: yes 
-roles:
+  roles:
     - common
- #   - docker
+#    - docker
