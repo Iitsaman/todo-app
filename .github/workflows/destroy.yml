@@ -3,6 +3,10 @@ name: Terraform Destroy EC2 Environment
 
 on:
   workflow_dispatch:
+    inputs:
+      confirm_destroy:
+        description: "Type YES to confirm destruction"
+        required: true
 
 jobs:
   destroy:
@@ -13,6 +17,13 @@ jobs:
       ANSIBLE_HOST_KEY_CHECKING: False
 
     steps:
+      - name: Check confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm_destroy }}" != "YES" ]; then
+            echo "You must confirm destruction by typing YES"
+            exit 1
+          fi
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -42,6 +53,9 @@ jobs:
         run: terraform init
         working-directory: terraform
 
-      - name: Terraform Destroy
-        run: terraform destroy -var-file="environments/dev.tfvars" -auto-approve
+      - name: Terraform Validate
+        run: terraform validate
         working-directory: terraform
+
+      - name: Terraform Destroy
+        run: terraform destroy -var-file="environmen
