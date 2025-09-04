@@ -51,7 +51,7 @@ jobs:
         working-directory: terraform
 
       - name: Upload Ansible inventory artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ansible-inventory
           path: ansible/inventory
@@ -66,7 +66,7 @@ jobs:
       ANSIBLE_HOST_KEY_CHECKING: False
     steps:
       - name: Download Ansible inventory artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ansible-inventory
           path: ansible
