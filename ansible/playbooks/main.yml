@@ -1,9 +1,12 @@
 
-
 - name: configuration of ec2 instances
   hosts: launched_ec2_instances
   gather_facts: yes
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 1a54ef4b9b7ed20d8c54020750c48f760e443b7a
   roles:
     - common
 #    - docker
