@@ -1,82 +1,23 @@
+
 name: Deploy MERN App to EC2 using Terraform & Ansible
 
 on:
-  workflow_dispatch:
-    inputs:
-      run_terraform:
-        description: 'Run Terraform? (true/false)'
-        required: true
-        default: 'true'
-      run_ansible:
-        description: 'Run Ansible? (true/false)'
-        required: true
-        default: 'true'
+  push:
+    branches:
+      - main
 
 jobs:
-  terraform:
-    if: ${{ github.event.inputs.run_terraform == 'true' }}
+  deploy:
     runs-on: ubuntu-latest
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      EC2_SSH_KEY_PATH: ~/.ssh/ec2_key.pem
+      ANSIBLE_HOST_KEY_CHECKING: False
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.6.6
-
-      - name: Terraform Init
-        run: terraform init
-        working-directory: terraform
-
-      - name: Terraform Plan
-        run: terraform plan -var-file="environments/dev.tfvars"
-        working-directory: terraform
-
-      - name: Terraform Apply
-        run: terraform apply -var-file="environments/dev.tfvars" -auto-approve
-        working-directory: terraform
-
-      - name: Debug Terraform Outputs
-        run: terraform output
-        working-directory: terraform
-
-      - name: Check generated Ansible inventory file
-        run: |
-          ls -l ../ansible/
-          cat ../ansible/inventory
-        working-directory: terraform
-
-      - name: Upload Ansible inventory artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ansible-inventory
-          path: ansible/inventory
-
-  ansible:
-    if: ${{ github.event.inputs.run_ansible == 'true' }}
-    runs-on: ubuntu-latest
-    needs: terraform
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      ANSIBLE_HOST_KEY_CHECKING: False
-    steps:
-      - name: Download Ansible inventory artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: ansible-inventory
-          path: ansible
-
-      # **Do NOT checkout code here to avoid overwriting inventory file**
-
-      - name: Debug inventory contents before Ansible run
-        run: |
-          ls -l ansible/
-          cat ansible/inventory
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -90,6 +31,31 @@ jobs:
           ansible-galaxy collection install amazon.aws
           ansible-galaxy collection install community.docker --force
 
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.6
+
+      - name: Terraform Init
+        run: terraform init
+        working-directory: terraform
+
+      - name: Terraform plan 
+        run: terraform plan -var-file="environments/dev.tfvars"
+        working-directory: terraform        
+
+      - name: Terraform Apply
+        run: terraform apply -var-file="environments/dev.tfvars" -auto-approve
+
+        working-directory: terraform
+
       - name: Create SSH key file
         run: |
           mkdir -p ~/.ssh
@@ -97,8 +63,9 @@ jobs:
           chmod 400 ~/.ssh/ec2_key.pem
 
       - name: Run Ansible Playbook
-        run: |
+        run : |
           ansible-playbook \
-            -i ansible/inventory \
-            -e "ansible_ssh_private_key_file=~/.ssh/ec2_key.pem" \
-            ansible/playbooks/main.yml
+          -i ansible/inventory \
+          -e "ansible_ssh_private_key_file=~/.ssh/ec2_key.pem" \
+          ansible/playbooks/main.yml 
+ 
