@@ -71,6 +71,8 @@ jobs:
           name: ansible-inventory
           path: ansible
 
+      - name: Checkout code
+        uses: actions/checkout@v4
       # **Do NOT checkout code here to avoid overwriting inventory file**
 
       - name: Debug inventory contents before Ansible run
