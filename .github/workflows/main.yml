@@ -70,6 +70,17 @@ jobs:
           echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/ec2_key.pem
           chmod 400 ~/.ssh/ec2_key.pem
 
+      - name: Print Inventory for Debugging
+        run: |
+            echo "---- Ansible Inventory ----"
+            cat ansible/inventory || echo "Inventory not found!"
+            echo "---------------------------"
+          
+        
+      - name: Debug Inventory
+        run: cat ansible/inventory
+
+
       - name: Run Ansible Playbook
         run: |
           ansible-playbook \
