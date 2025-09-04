@@ -40,6 +40,22 @@ jobs:
         run: terraform apply -var-file="environments/dev.tfvars" -auto-approve
         working-directory: terraform
 
+      - name: Debug Terraform Outputs
+        run: terraform output
+        working-directory: terraform
+
+      - name: Check generated Ansible inventory file
+        run: |
+          ls -l ../ansible/
+          cat ../ansible/inventory
+        working-directory: terraform
+
+      - name: Upload Ansible inventory artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ansible-inventory
+          path: ansible/inventory
+
   ansible:
     if: ${{ github.event.inputs.run_ansible == 'true' }}
     runs-on: ubuntu-latest
@@ -49,8 +65,18 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       ANSIBLE_HOST_KEY_CHECKING: False
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Download Ansible inventory artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ansible-inventory
+          path: ansible
+
+      # **Do NOT checkout code here to avoid overwriting inventory file**
+
+      - name: Debug inventory contents before Ansible run
+        run: |
+          ls -l ansible/
+          cat ansible/inventory
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -70,21 +96,9 @@ jobs:
           echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/ec2_key.pem
           chmod 400 ~/.ssh/ec2_key.pem
 
-      - name: Print Inventory for Debugging
-        run: |
-            echo "---- Ansible Inventory ----"
-            cat ansible/inventory || echo "Inventory not found!"
-            echo "---------------------------"
-          
-        
-      - name: Debug Inventory
-        run: cat ansible/inventory
-
-
       - name: Run Ansible Playbook
         run: |
           ansible-playbook \
             -i ansible/inventory \
             -e "ansible_ssh_private_key_file=~/.ssh/ec2_key.pem" \
             ansible/playbooks/main.yml
-
