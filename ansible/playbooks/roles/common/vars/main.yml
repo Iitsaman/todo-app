@@ -1,19 +1,17 @@
 nginx_package_name:
   Ubuntu: nginx
- 
 
 node_package_name:
   Ubuntu: nodejs
- 
 
-npm_package_name:
-  Ubuntu: npm
- 
-
-package_names:
-  - pk_name: "{{ nginx_package_name[ansible_distribution] }}"
-  - pk_name: "{{ node_package_name[ansible_distribution] }}"
-  - pk_name: "{{ npm_package_name[ansible_distribution] }}"
+other_packages:
   - pk_name: git
-  - pk_name: docker
   - pk_name: curl
+
+# Path variables for source sync
+app_source: "{{ playbook_dir }}/../../"     # Adjust as needed
+app_dest: "/opt/todo-app"
+
+
+
+
