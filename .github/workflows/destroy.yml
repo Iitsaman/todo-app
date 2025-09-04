@@ -58,4 +58,6 @@ jobs:
         working-directory: terraform
 
       - name: Terraform Destroy
-        run: terraform destroy -var-file="environmen
+        run: terraform destroy -var-file="environment.tfvars" -auto-approve
+        working-directory: terraform
+
