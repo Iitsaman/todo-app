@@ -1,29 +1,5 @@
 
 
-- name: Ensure common required packages are installed
-  ansible.builtin.package:
-    name: "{{ item.pk_name}}"
-    state: present
-  become: yes
-  loop: "{{ package_names }}"
-  register: package_result
-
-
-- name: Copy source code
-  become: yes
-  synchronize:
-    src: "{{ playbook_dir }}/../../"
-    dest: "/opt/todo-app"        # <-- replace with your actual destination directory
-    delete: yes
-    recursive: yes
-    rsync_opts:
-      - "--exclude=.git"
-      - "--exclude=.github"
-      - "--exclude=ansible"
-      - "--exclude=todo-frontend"
-      - "--exclude=terraform"
-
-
 # tasks/main.yml
 
 - name: Set resolved package names based on OS
