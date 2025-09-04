@@ -1,69 +1,25 @@
-# roles/common/tasks/main.yml
 
-- name: Set resolved package names based on OS
-  set_fact:
-    resolved_package_names: "{{ [{'pk_name': nginx_package_name[ansible_distribution]}] + other_packages }}"
-  when: ansible_distribution in nginx_package_name
-  vars:
-    ansible_distribution: "{{ ansible_facts['distribution'] }}"
-
-- name: Update apt cache
-  apt:
-    update_cache: yes
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for common
+- name: Install common Packages
   become: yes
-
-- name: Install common packages
-  apt:
+  package:
     name: "{{ item.pk_name }}"
     state: present
-  loop: "{{ resolved_package_names }}"
+  with_items: "{{ package_names }}"
+
+- name: Copy Source Code
   become: yes
-
-# --- Node.js (includes npm) installation ---
-
-- name: Add Node.js GPG key
-  apt_key:
-    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-    state: present
-  become: yes
-
-- name: Add Node.js 18.x repo
-  apt_repository:
-    repo: "deb https://deb.nodesource.com/node_18.x {{ ansible_distribution_release }} main"
-    state: present
-  become: yes
-
-- name: Update apt cache after adding NodeSource
-  apt:
-    update_cache: yes
-  become: yes
-
-- name: Install Node.js (and npm)
-  apt:
-    name: nodejs
-    state: present
-  become: yes
-
-# --- Copy source code ---
-
-- name: Ensure app directory exists
-  file:
-    path: "{{ app_dest }}"
-    state: directory
-    mode: '0755'
-  become: yes
-
-- name: Copy source code to remote instance
-  synchronize:
-    src: "{{ app_source }}"
-    dest: "{{ app_dest }}"
+  synchronize: 
+    src: "{{ playbook_dir }}/../../"
+    dest: "/opt/todo-app"
     delete: yes
     recursive: yes
     rsync_opts:
       - "--exclude=.git"
       - "--exclude=.github"
       - "--exclude=ansible"
-      - "--exclude=terraform"
       - "--exclude=todo-frontend"
-  delegate_to: localhost
-  become: yes
+      - "--exclude=terraform"
+      

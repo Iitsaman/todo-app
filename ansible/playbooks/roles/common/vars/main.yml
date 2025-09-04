@@ -1,15 +1,11 @@
 # roles/common/vars/main.yml
 
-nginx_package_name:
-  Ubuntu: nginx
-
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for common
 node_package_name:
-  Ubuntu: nodejs
-
-other_packages:
+  Ubuntu: node_package_name
+package_names:
+  - pk_name: "{{node_package_name[ansible_distribution]}}"
   - pk_name: git
-  - pk_name: curl
-
-# Path variables for source sync
-app_source: "{{ playbook_dir }}/../../"     # Adjust if needed
-app_dest: "/opt/todo-app"
+#  - pk_name: docker
