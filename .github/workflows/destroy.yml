@@ -1,4 +1,4 @@
-# .github/workflows/terraform-destroy.yml
+#.github/workflows/terraform-destroy.yml
 name: Terraform Destroy EC2 Environment
 
 on:
