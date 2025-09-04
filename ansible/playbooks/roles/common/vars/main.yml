@@ -1,3 +1,5 @@
+# roles/common/vars/main.yml
+
 nginx_package_name:
   Ubuntu: nginx
 
@@ -9,9 +11,5 @@ other_packages:
   - pk_name: curl
 
 # Path variables for source sync
-app_source: "{{ playbook_dir }}/../../"     # Adjust as needed
+app_source: "{{ playbook_dir }}/../../"     # Adjust if needed
 app_dest: "/opt/todo-app"
-
-
-
-

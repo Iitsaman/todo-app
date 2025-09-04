@@ -1,12 +1,8 @@
-
-
-# tasks/main.yml
+# roles/common/tasks/main.yml
 
 - name: Set resolved package names based on OS
   set_fact:
-    resolved_package_names:
-      - pk_name: "{{ nginx_package_name[ansible_distribution] }}"
-      - "{{ other_packages }}"
+    resolved_package_names: "{{ [{'pk_name': nginx_package_name[ansible_distribution]}] + other_packages }}"
   when: ansible_distribution in nginx_package_name
   vars:
     ansible_distribution: "{{ ansible_facts['distribution'] }}"
@@ -50,12 +46,17 @@
 
 # --- Copy source code ---
 
-
+- name: Ensure app directory exists
+  file:
+    path: "{{ app_dest }}"
+    state: directory
+    mode: '0755'
+  become: yes
 
 - name: Copy source code to remote instance
   synchronize:
-    src: "{{ playbook_dir }}/../../"
-    dest:  "/opt/todo-app"
+    src: "{{ app_source }}"
+    dest: "{{ app_dest }}"
     delete: yes
     recursive: yes
     rsync_opts:
@@ -66,4 +67,3 @@
       - "--exclude=todo-frontend"
   delegate_to: localhost
   become: yes
-
