@@ -66,7 +66,7 @@ jobs:
         run : |
           ansible-playbook \
           -i ansible/inventory \
-          -e "ec2_ssh_key_path=~/.ssh/ec2_key.pem" \
           ansible/playbooks/main.yml 
-
+        env:
+         ANSIBLE_HOST_KEY_CHECKING: False
 
