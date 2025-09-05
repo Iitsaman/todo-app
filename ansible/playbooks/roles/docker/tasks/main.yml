@@ -98,4 +98,33 @@
 
 
 
+- name: Get SSM Parameter
+  shell: |
+    aws ssm get-parameter \
+    --name "/{{ environment }}/backend/MONGODB_URI" \
+    --with-decryption \
+    --query "Parameter.Value" \
+    --output text \
+    --region {{ aws_region }}
+  register: mongodb_uri
+  become: yes
 
+- name: Create .env file from SSM paramenters
+  copy: 
+    content: |
+      MONGODB_URI={{mongodb_uri.stdout }}
+      NODE_ENV=production
+      PORT=3002
+    dest: /opt/todo-app/todo-backend/.env
+    mode: "0600
+  become: yes
+
+- name: Start the backend container
+  docker_container:
+    name: backend
+    image: "{{ backend_ecr_uri }}:latest"
+    state: started
+    restart_policy: always
+    ports: 
+      - "3002:3002"
+    env_file: /opt/todo-app/todo-backend/.env
