@@ -1,4 +1,4 @@
-
+---
 - name: Get ECR login token
   shell: "aws ecr get-login-password --region {{ aws_region }}"
   register: ecr_token
@@ -11,15 +11,12 @@
     password: "{{ ecr_token.stdout }}"
     reauthorize: yes
 
-- name: Check if Buildx builder exists
-  shell: docker buildx inspect default
-  register: buildx_inspect
-  failed_when: false
-  changed_when: false
+- name: Remove existing Buildx builder named default (if any)
+  command: docker buildx rm default
+  ignore_errors: yes
 
-- name: Create and use default Buildx builder if not exists
+- name: Create and use default Buildx builder with docker-container driver
   command: docker buildx create --name default --driver docker-container --use --bootstrap
-  when: buildx_inspect.rc != 0
 
 - name: Build and push backend Docker image
   command: >
@@ -31,7 +28,6 @@
     DOCKER_BUILDKIT: 1
   register: build_output
   changed_when: true
-  ignore_errors: false
 
 - name: Show Docker build output
   debug:
