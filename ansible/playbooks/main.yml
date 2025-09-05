@@ -1,9 +1,17 @@
 
-- name: configuration of ec2 instances
+# playbook.yml
+---
+
+- name: Provision EC2 instance and push Docker image to ECR
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - ecr
+
+- name: Configure EC2 instances
   hosts: launched_ec2_instances
+  become: yes
   gather_facts: yes
-
-
   roles:
     - common
-#    - docker
+    - docker

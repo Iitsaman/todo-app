@@ -1,0 +1,22 @@
+
+docker_packages:
+  Ubuntu:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+  Amazon:
+    - docker
+
+docker_service_name:
+  Ubuntu: docker
+  Amazon: docker
+
+docker_compose_version: "v2.20.2"
+
+docker_compose_cli_plugin_dir: /usr/local/lib/docker/cli-plugins
+docker_compose_plugin_filename: docker-compose
+docker_compose_project_src: /opt/todo-app  # Customize or override in playbook

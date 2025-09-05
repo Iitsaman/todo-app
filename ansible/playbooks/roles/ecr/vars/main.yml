@@ -1,0 +1,6 @@
+
+
+# aws_account_id: "123456789012"
+# aws_region: "eu-north-1"
+# backend_ecr_uri: "123456789012.dkr.ecr.eu-north-1.amazonaws.com/my-backend-repo"
+# docker_context_path: "{{ playbook_dir }}/../../todo-backend"

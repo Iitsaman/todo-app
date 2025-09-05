@@ -1,5 +1,5 @@
 
-#SPDX-License-Identifier: MIT-0
+
 ---
 # tasks file for common
 - name: Install common Packages
@@ -7,7 +7,7 @@
   package:
     name: "{{ item.pk_name }}"
     state: present
-  with_items: "{{ package_names }}"
+  loop: "{{ package_names }}"
 
 - name: Copy Source Code
   become: yes

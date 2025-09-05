@@ -1,0 +1,76 @@
+- name: Install prerequisite packages (Ubuntu)
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  when: ansible_distribution == 'Ubuntu'
+  loop: "{{ docker_packages.Ubuntu[0:4] }}"
+
+- name: Add Docker GPG key (Ubuntu)
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Add Docker repository (Ubuntu)
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    state: present
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install Docker packages (Ubuntu)
+  ansible.builtin.apt:
+    name: "{{ docker_packages.Ubuntu[4:] }}"
+    state: present
+    update_cache: yes
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Install Docker package (Amazon Linux)
+  ansible.builtin.yum:
+    name: "{{ docker_packages.Amazon }}"
+    state: present
+  when: ansible_distribution == 'Amazon'
+
+#2
+- name: Ensure(create) Docker group exists
+  ansible.builtin.group:
+    name: docker
+    state: present
+
+#3
+- name: Add current user to Docker group
+  ansible.builtin.user:
+    name: "{{ ansible_env.USER }}"
+    groups: docker
+    append: yes
+
+#
+- name: Start and enable Docker service
+  ansible.builtin.service:
+    name: "{{ docker_service_name[ansible_distribution] }}"
+    state: started
+    enabled: yes
+
+
+
+
+
+- name: Create Docker CLI plugin directory
+  ansible.builtin.file:
+    path: "{{ docker_compose_cli_plugin_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Install Docker Compose plugin (v2)
+  ansible.builtin.get_url:
+    url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-linux-{{ ansible_architecture }}"
+    dest: "{{ docker_compose_cli_plugin_dir }}/{{ docker_compose_plugin_filename }}"
+    mode: "0755"
+
+
+- name: Deploy Docker Compose project (optional)
+  community.docker.docker_compose_v2:
+    project_src: "{{ docker_compose_project_src }}"
+    state: present
+  become: yes
+  when: docker_compose_project_src is defined
