@@ -109,6 +109,10 @@
   register: mongodb_uri
   become: yes
 
+- name: Debug the fetched MongoDB URI
+  debug:
+    var: mongodb_uri.stdout
+
 - name: Create .env file from SSM paramenters
   copy: 
     content: |

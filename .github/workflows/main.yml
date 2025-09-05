@@ -66,6 +66,9 @@ jobs:
           ls -l ansible/
           cat ansible/inventory          
 
+
+          
+
       - name: Run Ansible Playbook
         run : |
           ansible-playbook \
