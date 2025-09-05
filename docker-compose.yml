@@ -19,8 +19,8 @@ services:
     container_name: backend
     networks:
       - todo-network
-    env_file:
-      - ./todo-backend/.env
+#    env_file:
+#      - ./todo-backend/.env
 
 networks:
   todo-network:
