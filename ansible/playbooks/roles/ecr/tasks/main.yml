@@ -31,4 +31,4 @@
 
 - name: Show Docker build output
   debug:
-    var: build_output.stdout_lines
+    var: build_output.stdout_lines | length > 0
