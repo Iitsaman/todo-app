@@ -12,11 +12,11 @@
     reauthorize: yes
 
 - name: Remove existing Buildx builder named default (if any)
-  command: docker buildx rm default
+  command: docker buildx rm mybuilder
   ignore_errors: yes
 
 - name: Create and use default Buildx builder with docker-container driver
-  command: docker buildx create --name default --driver docker-container --use --bootstrap
+  command: docker buildx create --name mybuilder  --driver docker-container --use --bootstrap
 
 - name: Build and push backend Docker image
   command: >
