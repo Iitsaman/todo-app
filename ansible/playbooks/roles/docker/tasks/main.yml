@@ -101,7 +101,7 @@
 - name: Get SSM Parameter
   shell: |
     aws ssm get-parameter \
-    --name "/{{ environment }}/backend/MONGODB_URI" \
+    --name "/dev/backend/MONGODB_URI" \
     --with-decryption \
     --query "Parameter.Value" \
     --output text \
