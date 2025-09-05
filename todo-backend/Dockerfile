@@ -1,6 +1,6 @@
 # 1. Build stage
 
-FROM node:22-alpine AS build
+FROM --platform=$TARGETPLATFORM node:22-alpine AS build
 
 WORKDIR /app
 
