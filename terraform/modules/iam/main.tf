@@ -78,7 +78,7 @@ resource "aws_iam_role_policy" "ssm_access" {
                 "ssm:GetParametersByPath"
             ]
             Resource = [
-              "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter/${var.environment}/backend/*"
+              "arn:aws:ssm:${var.region}:${var.aws_account_id}:parameter/dev/backend/MONGODB_URI"
             ]
         }
     ]
