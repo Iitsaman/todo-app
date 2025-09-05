@@ -1,45 +1,42 @@
-- name: Install unzip and curl (required for AWS CLI install)
-  apt:
-    name:
-      - unzip
-      - curl
+- name: Install unzip (required for AWS CLI)
+  ansible.builtin.apt:
+    name: unzip
     state: present
     update_cache: yes
   become: yes
 
-- name: Download AWS CLI v2 installer
-  get_url:
-    url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
-    dest: "/tmp/awscliv2.zip"
+- name: Download AWS CLI v2 zip
+  ansible.builtin.get_url:
+    url: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+    dest: /tmp/awscliv2.zip
   become: yes
 
-- name: Unzip AWS CLI installer
-  unarchive:
-    src: "/tmp/awscliv2.zip"
-    dest: "/tmp"
+- name: Unzip AWS CLI v2 installer
+  ansible.builtin.unarchive:
+    src: /tmp/awscliv2.zip
+    dest: /tmp
     remote_src: yes
   become: yes
 
-- name: Install AWS CLI
-  command: "/tmp/aws/install"
+- name: Install AWS CLI v2
+  ansible.builtin.command: /tmp/aws/install
   args:
     creates: /usr/local/bin/aws
   become: yes
 
 - name: Verify AWS CLI installation
-  command: "aws --version"
+  ansible.builtin.command: aws --version
   register: aws_cli_version
   changed_when: false
   become: yes
 
-- name: Show installed AWS CLI version
+- name: Debug AWS CLI version
   debug:
     var: aws_cli_version.stdout
 
 
 
----
-# tasks file for common
+
 
 - name: Install prerequisites for Node.js (Ubuntu)
   become: yes

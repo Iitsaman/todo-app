@@ -1,4 +1,4 @@
----
+
 - name: Install prerequisites for Docker
   ansible.builtin.apt:
     name:
