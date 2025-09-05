@@ -1,17 +1,34 @@
 
 
+
 ---
 # tasks file for common
-- name: Install common Packages
+
+- name: Install prerequisites for Node.js (Ubuntu)
   become: yes
-  package:
+  apt:
+    name: curl
+    state: present
+    update_cache: yes
+
+- name: Add NodeSource repo for Node.js 18.x (Ubuntu)
+  become: yes
+  shell: curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+  args:
+    warn: false
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install common packages
+  become: yes
+  apt:
     name: "{{ item.pk_name }}"
     state: present
+    update_cache: yes
   loop: "{{ package_names }}"
 
 - name: Copy Source Code
   become: yes
-  synchronize: 
+  synchronize:
     src: "{{ playbook_dir }}/../../"
     dest: "/opt/todo-app"
     delete: yes
@@ -22,4 +39,3 @@
       - "--exclude=ansible"
       - "--exclude=todo-frontend"
       - "--exclude=terraform"
-      
