@@ -1,5 +1,5 @@
 
-name: Deploy MERN App to EC2 using Terraform & Ansible
+name: Deploy TODO App to EC2 using Terraform & Ansible
 
 on:
   push:
@@ -83,5 +83,21 @@ jobs:
         id: get-bucket
         run: |
          BUCKET_NAME=$(grep "frontend_bucket_name=" ansible/inventory | cut -d"=" -f2)
-         echo "bucket_name=$BUCKET_NAME" >> $GITHUB_OUTPUT  
+         echo "bucket_name=$BUCKET_NAME" >> "$GITHUB_OUTPUT"
 
+
+
+      - name: Extract cloudfront distribution id from inventory
+        id: get-cf-distribution
+        run: |
+         CF_DISTRIBUTION_NAME=$(grep "cloudfront_distribution_id=" ansible/inventory | cut -d"=" -f2)
+         echo "cloudfront_distribution_id=$CF_DISTRIBUTION_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Deploy Frontend
+        run: |
+         cd todo-frontend
+         ./frontend_deploy.sh "${{ steps.get-bucket.outputs.bucket_name}}" "${{ steps.get-cf-distribution.outputs.cloudfront_distribution_id}}"
+        env: 
+           AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+           AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           AWS_DEFAULT_REGION: us-east-1

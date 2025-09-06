@@ -1,6 +1,9 @@
 
 #!/bin/bash
 
+set -euo pipefail
+
+
 # Check if bucket name is provided
 if [ -z "$1" ]; then
     echo "Error: Bucket name not provided"
