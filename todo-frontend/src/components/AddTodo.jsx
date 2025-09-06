@@ -24,7 +24,7 @@ const TodoApp = () => {
   const fetchTodos = async () => {
     try {
 
-      const response = await fetch('${BACKEND_URL}/todos'); // ✅ OR RELATIVE path fetch('/api/todos');
+      const response = await fetch(`${BACKEND_URL}/todos`);  // ✅ OR RELATIVE path fetch('/api/todos');
 
       console.log("Fetch response status:", response.status);
       if (response.ok) {
@@ -54,7 +54,7 @@ const TodoApp = () => {
 
       
 
-      const response = await fetch('${BACKEND_URL}/add-todo', // OR fetch('http://localhost:3001/api/add-todo'
+      const response = await fetch(`${BACKEND_URL}/add-todo`, // OR fetch('http://localhost:3001/api/add-todo'
         {
 
         method: "POST",
