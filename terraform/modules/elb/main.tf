@@ -48,7 +48,7 @@ resource "random_string" "target_group_suffix" {
 
 resource "aws_lb_target_group" "my_target_group" {
    name =  "${var.environment}-backend-tg-${random_string.target_group_suffix.result}"
-   port =  3002
+   port =  3001
    protocol = "HTTP"
    vpc_id = var.vpc_id # var.alb_config.vpc_id
 

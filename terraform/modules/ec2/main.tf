@@ -10,8 +10,8 @@ resource "aws_security_group" "my_sg" {
   description = "Security group for backend EC2 instance"
   vpc_id      = var.instance_config.vpc_id
   ingress {
-    from_port   = 3002
-    to_port     = 3002
+    from_port   = 3001
+    to_port     = 3001
     protocol    = "tcp"
     security_groups =  [var.instance_config.alb_security_group_id]
     
@@ -83,7 +83,7 @@ resource "aws_lb_target_group_attachment" "backend_tgroup" {
   count =  var.instance_config.instance_count 
   target_group_arn =  var.instance_config.target_group_arn
   target_id =  aws_instance.my_instance[count.index].id
-  port =  3002
+  port =  3001
   lifecycle {
     create_before_destroy = true
   }

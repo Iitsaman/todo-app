@@ -77,4 +77,11 @@ jobs:
           -e "backend_path=${{ github.workspace }}/todo-backend" \
           -e "environment=dev" \
           ansible/playbooks/main.yml 
- 
+  
+  
+      - name: Extract S3 bucket name from inventory
+        id: get-bucket
+        run: |
+         BUCKET_NAME=$(grep "frontend_bucket_name=" ansible/inventory | cut -d"=" -f2)
+         echo "bucket_name=$BUCKET_NAME" >> $GITHUB_OUTPUT  
+
