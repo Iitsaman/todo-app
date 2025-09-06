@@ -22,6 +22,7 @@ DISTRIBUTION_ID="$2"
 echo "Starting deployment to bucket: $BUCKET_NAME"
 
 echo "Building the frontend"
+npm install
 npm run build
 
 
