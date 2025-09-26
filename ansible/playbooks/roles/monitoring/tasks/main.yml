@@ -1,11 +1,12 @@
 
 
+
 - name: Ensure required packages are installed
   package:
    name:
      - docker
   state: present
-
+  
 - name: create docker compose dir 
   file: 
     path: /usr/local/bin
