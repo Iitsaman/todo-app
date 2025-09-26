@@ -86,9 +86,9 @@
     reauthorize: yes
   register: docker_login_result
 
-- name: Debug ECR Token
-  debug: 
-    var: docker_login_result
+#- name: Debug ECR Token
+#  debug: 
+#    var: docker_login_result
 
 - name: Pull latest Backend image
   docker_image:

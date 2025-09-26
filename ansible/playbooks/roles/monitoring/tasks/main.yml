@@ -4,7 +4,7 @@
 - name: Ensure required packages are installed
   package:
     name:
-      - docker
+      - docker.io
     state: present
 
 - name: Create Docker Compose dir 
