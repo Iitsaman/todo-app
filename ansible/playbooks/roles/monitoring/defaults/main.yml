@@ -2,3 +2,5 @@ docker_compose_path: /opt/monitoring
 monitoring_dir: /opt/monitoring
 
 grafana_admin_password: "admin"
+
+docker_compose_version: "v2.24.6"

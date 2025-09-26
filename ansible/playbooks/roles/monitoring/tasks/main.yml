@@ -1,11 +1,40 @@
 
-
-
-- name: Ensure required packages are installed
-  package:
+- name: Ensure required packages for Docker are installed
+  apt:
     name:
-      - docker.io
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
     state: present
+    update_cache: yes
+  become: yes
+
+
+- name: Add Docker GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  become: yes
+
+
+- name: Add Docker official repository
+  apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release | lower }} stable"
+    state: present
+    filename: docker
+  become: yes
+
+- name: Install Docker CE and CLI
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: present
+    update_cache: yes
+  become: yes
 
 - name: Create Docker Compose dir 
   file: 
