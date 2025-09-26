@@ -76,7 +76,7 @@
    - "{{ monitoring_dir }}/Prometheus"
    - "{{ monitoring_dir }}/Prometheus/data"
    - "{{ monitoring_dir }}/grafana"
-
+  become: yes
 
 - name: Copy Docker Compose file
   template:

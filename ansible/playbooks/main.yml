@@ -1,6 +1,6 @@
 
 # playbook.yml
----
+
 
 - name: Provision EC2 instance and push Docker image to ECR
   hosts: localhost
