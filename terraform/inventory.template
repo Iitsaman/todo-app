@@ -10,7 +10,7 @@ backend_ecr_repository_name=${backend_ecr_repository_name}
 aws_account_id=${aws_account_id}
 frontend_bucket_name=${frontend_bucket_name}
 cloudfront_distribution_id=${cloudfront_distribution_id}
-
+backend_ec2_tag_name=${environment}-backend
 
 
 [launched_ec2_instances]
