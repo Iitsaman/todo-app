@@ -3,11 +3,11 @@
 
 - name: Ensure required packages are installed
   package:
-   name:
-     - docker
-  state: present
-  
-- name: create docker compose dir 
+    name:
+      - docker
+    state: present
+
+- name: Create Docker Compose dir 
   file: 
     path: /usr/local/bin
     state: directory
