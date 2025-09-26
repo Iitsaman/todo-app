@@ -15,3 +15,10 @@
   roles:
     - common
     - docker
+
+- name: Configure of monitoring EC2 instances
+  hosts: monitoring_ec2_instances
+  become: yes
+  gather_facts: yes
+  roles:
+    - monitoring

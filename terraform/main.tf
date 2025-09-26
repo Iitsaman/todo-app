@@ -97,6 +97,38 @@ module "ec2" {
 
 
 
+
+
+
+
+
+module "monitoring" {
+  source = "./modules/monitoring"
+  environment =  var.environment
+  
+
+  instance_config = {
+    ami_id =  var.instance_config.ami_id
+    instance_type =  var.instance_config.instance_type
+    vpc_id =   var.instance_config.vpc_id
+    instance_count = var.instance_config.instance_count
+    subnet_ids = var.instance_config.subnet_ids
+    key_name =  var.instance_config.key_name
+     # name = var.instance_config.instance_name
+    instance_name         = var.instance_config.instance_name
+    region                = var.instance_config.region
+
+# ✅ These must be included
+    instance_profile_name = module.iam.instance_profile_name
+    alb_security_group_id = module.alb.alb_security_group_id
+    target_group_arn      = module.alb.target_group_arn
+    
+  }
+}   
+
+
+
+
 /*
 
 module "server_cpu_alarm" {

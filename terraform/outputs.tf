@@ -4,7 +4,7 @@ resource "local_file" "inventory_file" {
   {
 
     ec2_public_dns  = module.ec2.public_dns
-  #  monitring_ec2_public_dns = module.ec2.public_dns
+    monitoring_ec2_public_dns = module.monitoring.monitoring_public_dns
     region = var.instance_config.region
     backend_ecr_uri = module.ecr.backend_ecr_uri
     environment = var.environment

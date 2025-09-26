@@ -1,0 +1,121 @@
+
+
+- name: Ensure required packages are installed
+  package:
+   name:
+     - docker
+  state: present
+
+- name: create docker compose dir 
+  file: 
+    path: /usr/local/bin
+    state: directory
+    mode: "0755"
+  become: yes
+
+
+- name: Install Docker Compose 
+  get_url:
+      url: "https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-linux-x86_64"
+      dest: /usr/local/bin/docker-compose
+      mode: "0755"
+  become: yes
+
+- name: create syn link for Docker Compose 
+  file:
+    src: /usr/local/bin/docker-compose
+    dest: /usr/bin/docker-compose
+    state: link
+
+
+- name: start docker service 
+  service:
+   name: docker 
+   state: started
+   enabled: yes 
+
+# create all necessary directories for Prometheus, Grafana, and Loki.
+
+- name: create monitoring dir 
+  file: 
+
+    state: directory
+    mode: "0755"
+  loop:
+   - "{{ monitoring_dir }}"
+   - "{{ monitoring_dir }}/Prometheus"
+   - "{{ monitoring_dir }}/Prometheus/data"
+   - "{{ monitoring_dir }}/grafana"
+
+
+- name: Copy Docker Compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ monitoring_dir }}/docker-compose.yml"  # /opt/monitoring/docker-compose.yml
+
+- name: Copy Prometheus config
+  template:
+    src: prometheus.yml.j2
+    dest: "{{ monitoring_dir }}/prometheus/prometheus.yml"
+
+
+- name: stop existing containers
+  shell: |
+    cd {{ monitoring_dir }}
+    docker compose down
+  ignore_errors: yes
+
+
+- name: Start monitoring stack 
+  shell: |
+    cd {{ monitoring_dir }}
+    docker compose up -d --build
+
+- name: wait for services to up
+  wait_for:
+    host: localhost
+    port: "{{ item }}"
+    timeout: 300
+  loop:
+    - 9090 # Prometheus
+    - 3000 # Grafana
+    - 9100 # Node exporter
+  
+
+
+- name: show service status 
+  shell: docker-compose ps
+  args:
+    chdir: "{{ monitoring_dir }}"
+  register: service_status
+
+
+- name: debug service status 
+  debug: 
+    var: service_status.stdout_lines
+
+- name: wait for grafana to ready
+  uri: 
+    url: "http://localhost:3000/api/health"
+    status_code: 200
+  register: result
+  until: result.status == 200
+  retries: 60
+  delay: 1
+
+
+- name: configure prometheus data source
+  uri:
+    url: "http://localhost:3000/api/datasources"
+    method: POST
+    user: admin
+    password: "{{ grafana_admin_password }}"
+    force_basic_auth: yes
+    body_format: json
+    body:
+      name: "Prometheus"
+      type: "prometheus"
+      url: "http://prometheus:9090"
+      access: "proxy"
+      isDefault: true
+    status_code: [200, 409]
