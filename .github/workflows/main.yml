@@ -1,5 +1,5 @@
 
-name: Deploy TODO App to EC2 using Terraform & Ansible
+name: Deploy TODO App ..
 
 on:
   push:

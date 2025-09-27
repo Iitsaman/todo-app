@@ -26,8 +26,8 @@ resource "aws_security_group" "my_sg" {
   }
 
   ingress {
-    from_port = 3002
-    to_port = 3002
+    from_port = 3000
+    to_port = 3000
     protocol = "tcp"
     security_groups = [var.monitoring_security_group_id]
     description = "Allow application metrics scraping"
