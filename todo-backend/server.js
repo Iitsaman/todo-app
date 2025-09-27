@@ -1,12 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-//import { connect } from "mongoose";
-//import Todo from "./Models/Todomodels.js";
 import connectionDB from './db.js';
-// Load environment variables from .env file
 import todoroutes from './routes/todoroutes.js';
-//const client = require('prom-client');
+import { register, httpRequestDurationSeconds } from './utils/metrics.js';
 
 // Initialize environment variables
 // Load environment variables
@@ -22,8 +19,26 @@ connectionDB();
 app.use(express.json());   // Parse JSON
 app.use(cors());
 
+
+//  Middleware to track request duration
+app.use((req, res, next) => {
+  const start = process.hrtime();
+  res.on('finish', () => {
+    const diff = process.hrtime(start);
+    const durationInSeconds = diff[0] + diff[1] / 1e9;
+
+    httpRequestDurationSeconds
+      .labels(req.method, req.route?.path || req.path, res.statusCode.toString())
+      .observe(durationInSeconds);
+  });
+  next();
+});
+
+
 // Route Mounting
 app.use('/api', todoroutes); // <--- All your routes are now under /api
+
+// Basic health route
 
 app.get("/",(req,res)=> {
   res.status(200).json({message:"hello from server"})
@@ -33,57 +48,22 @@ app.get('/api/test', (req, res) => {
   res.json({ success: true, message: "API is working" });
 });
 
+// ✅ Prometheus metrics endpoint
+app.get("/metrics", async (req, res) => {
+  res.set('Content-Type', register.contentType);
+  res.end(await register.metrics());
+});
+
+
 
 const PORT = process.env.PORT || 3001;
-
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
 
 
-/*
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on http://0.0.0.0:${PORT}`);
-});
 
-*/
   
-// GET route to retrieve all todos
- /*app.get('/get-todos', async (req, res) => {
-  try {
-    // Fetch all todos from the database
-    const todos = await Todo.find();
-    console.log('Fetched todos:', todos);
-
-    // Send the todos as the response
-    res.status(200).json(todos);
-  } catch (err) {
-    console.error('Error fetching todos:', err);
-    res.status(500).json({ error: 'Failed to fetch todos' });
-  }
-});*/
 
 
-/*app.post('/add-todo',async(req, res) => {
-  
-  try {
-    const  title  = req.body.todo; // Use 'todo' to match React
-    console.log('Adding a todo:', title);
-
-    const newTodo = new Todo({
-      title: title, // Use 'todo' for the title
-    });
-
-    console.log('Adding a todo', newTodo);
-    const savedTodo = await newTodo.save(); // Save the new todo
-    console.log('Added a todo', savedTodo);
-
-    res.status(200).json(savedTodo);
-  } catch (err) {
-    console.error('Error saving todo:', err);
-    res.status(500).json({ error: 'Failed to save todo' });
-  }
-})
-  
-*/
 
