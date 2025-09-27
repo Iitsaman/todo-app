@@ -1,5 +1,6 @@
 
 
+import { todoMetrics } from "../utils/metrics.js";
 
 
 import Todo from "../Models/Todomodels.js";
@@ -9,6 +10,9 @@ export const getTodos = async (req, res) => {
     // Fetch all todos from the database
     const todos = await Todo.find();
     console.log('Fetched todos:', todos);
+
+//////////////////////////////////////////////////
+         todoMetrics.todoCount.set(todos.length)
 
     // Send the todos as the response
     res.status(200).json(todos);
@@ -30,6 +34,12 @@ export const addTodo = async(req, res) => {
     console.log('Adding a todo', newTodo);
     const savedTodo = await newTodo.save(); // Save the new todo
     console.log('Added a todo', savedTodo);
+
+////////////////////////////////////////////
+        todoMetrics.todoAddedTotal.inc();
+        todoMetrics.todoCount.inc();
+
+
 
     res.status(200).json(savedTodo);
   } catch (err) {
@@ -79,4 +89,3 @@ export const toggleTodo = async (req, res) => {
     res.status(500).json({ error: 'Failed to update todo' });
   }
 };
-
