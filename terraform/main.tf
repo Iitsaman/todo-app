@@ -90,8 +90,9 @@ module "ec2" {
     instance_profile_name = module.iam.instance_profile_name
     alb_security_group_id = module.alb.alb_security_group_id
     target_group_arn      = module.alb.target_group_arn
-    
+ 
   }
+     monitoring_security_group_id = module.monitoring.monitoring_security_group_id
 }   
 
 

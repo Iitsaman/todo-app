@@ -21,6 +21,11 @@ variable "environment" {
   type = string
 }
 
+
+variable "monitoring_security_group_id" {
+  type = string
+}
+
 variable "tags" {
   description = "Common tags"
   type        = map(string)
