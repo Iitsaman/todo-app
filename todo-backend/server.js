@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { connect } from "mongoose";
-import Todo from "./Models/Todomodels.js";
+//import { connect } from "mongoose";
+//import Todo from "./Models/Todomodels.js";
 import connectionDB from './db.js';
 // Load environment variables from .env file
 import todoroutes from './routes/todoroutes.js';
@@ -28,6 +28,11 @@ app.use('/api', todoroutes); // <--- All your routes are now under /api
 app.get("/",(req,res)=> {
   res.status(200).json({message:"hello from server"})
 })
+
+app.get('/api/test', (req, res) => {
+  res.json({ success: true, message: "API is working" });
+});
+
 
 const PORT = process.env.PORT || 3001;
 
