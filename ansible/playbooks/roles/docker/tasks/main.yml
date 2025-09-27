@@ -74,9 +74,9 @@
     aws ecr get-login-password --region {{ aws_region }} 
   register: ecr_token
 
-- name: Debug ECR Token
-  debug: 
-    var: ecr_token
+#- name: Debug ECR Token
+#  debug: 
+#    var: ecr_token
 
 - name: Login into ECR registry
   community.docker.docker_login:

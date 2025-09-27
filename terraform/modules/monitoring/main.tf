@@ -12,7 +12,7 @@ resource "aws_instance" "monitoring" {
   iam_instance_profile =  aws_iam_instance_profile.monitoring_profile.name
  
   tags = {
-    Name =   "${var.environment}-monitoring-${count.index +1}" 
+    Name =   "${var.environment}-monitoring" 
     Environment = var.environment
   }
 

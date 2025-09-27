@@ -50,7 +50,7 @@ resource "aws_instance" "my_instance" {
 #    delete_on_termination = true
 
   tags = {
-    Name =   "${var.environment}-backend-${count.index +1}" 
+    Name =   "${var.environment}-backend" 
     Environment = var.environment
   }
 
