@@ -5,7 +5,7 @@
 //export default BACKEND_URL
 
 // "https://api.devhelp.site/api" || 
- const BACKEND_URL = "http://localhost:3001/api"
+ const BACKEND_URL = "https://api.devhelp.site/api" || "http://localhost:3001/api"
 
  export default BACKEND_URL
 
