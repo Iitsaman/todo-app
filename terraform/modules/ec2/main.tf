@@ -16,6 +16,7 @@ resource "aws_security_group" "my_sg" {
     security_groups =  [var.instance_config.alb_security_group_id]
     
   }
+  /*
 
     ingress {
     from_port   = 9100
@@ -33,7 +34,7 @@ resource "aws_security_group" "my_sg" {
     description = "Allow application metrics scraping"
   }
 
-  
+  */
   egress {
     from_port   = 0
     to_port     = 0
