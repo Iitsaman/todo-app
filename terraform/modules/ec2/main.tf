@@ -14,6 +14,7 @@ resource "aws_security_group" "my_sg" {
     to_port     = 3001
     protocol    = "tcp"
     security_groups =  [var.instance_config.alb_security_group_id]
+    description = " ec2"
     
   }
   
@@ -23,12 +24,13 @@ resource "aws_security_group" "my_sg" {
     to_port     = 9100
     protocol    = "tcp"
     security_groups =  [var.monitoring_security_group_id]
+    description = "node exporter metrics scraping"
     
   }
 
   ingress {
-    from_port = 3000
-    to_port = 3000
+    from_port = 3001
+    to_port = 3001
     protocol = "tcp"
     security_groups = [var.monitoring_security_group_id]
     description = "Allow application metrics scraping"

@@ -56,7 +56,7 @@ resource "aws_security_group" "mo_sg" {
   }
 
    tags = {
-     Name = "${var.environment}-backend-sg"
+     Name = "${var.environment}-monitoring-sg"
      Environment = var.environment
    }
 
