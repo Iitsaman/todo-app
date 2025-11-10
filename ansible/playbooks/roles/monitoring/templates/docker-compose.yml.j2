@@ -34,14 +34,14 @@ services:
     restart: unless-stopped
 
   grafana:
-    image: grafana/grafana:latest  # Removed space after colon
+    image: grafana/grafana:latest  
     user: root
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning
     environment:
       - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin  # You can use a .env file instead
+      - GF_SECURITY_ADMIN_PASSWORD=admin  # we can use a .env file instead
     ports:
       - "3000:3000"
     restart: unless-stopped

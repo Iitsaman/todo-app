@@ -1,13 +1,21 @@
 
-name: Deploy TODO App ..
+name: Deploy TODO App
 
 on:
   push:
     branches:
       - main
-      
     paths-ignore:
       - 'README.md'
+
+  # Allows manual triggering from the GitHub Actions tab
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Choose deployment environment"
+        required: true
+        default: "production"
+
 
 jobs:
   deploy:

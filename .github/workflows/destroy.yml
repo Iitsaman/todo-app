@@ -1,5 +1,5 @@
 #.github/workflows/terraform-destroy.yml
-name: Terraform Destroy EC2 Environment
+name: Cleanup Environment
 
 on:
   workflow_dispatch:
